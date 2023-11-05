@@ -60,3 +60,17 @@ Flags:
 
 Use "southpark-downloader [command] --help" for more information about a command.
 ```
+
+
+Example:
+
+```
+# download all seasons
+southpark-downloader -a
+
+# download season 26
+southpark-downloader -s 26
+
+# download episode 1 of season 26
+southpark-downloader -s 26 -e 1
+```

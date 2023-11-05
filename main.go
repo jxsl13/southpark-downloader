@@ -12,6 +12,7 @@ import (
 	"regexp"
 	"runtime"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/PuerkitoBio/goquery"
@@ -271,13 +272,43 @@ func (c *rootContext) Download(season, episode int) error {
 		return err
 	}
 
+	concurrency := make(chan struct{}, runtime.NumCPU()/2)
+	var wg sync.WaitGroup
+	wg.Add(len(videos))
+	errs := make(chan error, len(videos))
+
+	start := time.Now()
 	for _, v := range videos {
-		err = c.DownloadVideo(v)
-		if err != nil {
-			return err
+		go func(v Video) {
+			defer wg.Done()
+			concurrency <- struct{}{}
+
+			err := c.DownloadVideo(v)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "failed to download video: %v\n", err)
+				errs <- err
+			}
+		}(v)
+	}
+
+	wg.Wait()
+
+	dur := time.Since(start)
+	fmt.Printf("Downloaded %d videos in %s\n", len(videos), dur)
+
+	errList := make([]error, 0, len(errs))
+
+loop:
+	for i := 0; i < len(videos); i++ {
+		select {
+		case err := <-errs:
+			errList = append(errList, err)
+		default:
+			break loop
 		}
 	}
-	return nil
+
+	return errors.Join(errList...)
 }
 
 func (c *rootContext) Videos(season, episode int) ([]Video, error) {
@@ -327,7 +358,7 @@ func (c *rootContext) DownloadVideo(v Video) (err error) {
 		outDir,
 		absCmd,
 		"--concurrent-fragments",
-		strconv.Itoa(runtime.NumCPU()),
+		strconv.Itoa(runtime.NumCPU()/2),
 		"--throttled-rate",
 		c.Config.MinRate,
 		"--output",
