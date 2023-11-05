@@ -63,11 +63,16 @@ type rootContext struct {
 }
 
 func (c *rootContext) PreRunE(cmd *cobra.Command) func(cmd *cobra.Command, args []string) error {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		home = "./"
+	}
+
 	c.Config = &config.Config{
 		Reinitialize: false,
 		YouTubeDLDir: "./yt-dlp",
 		OutDir:       "./downloads",
-		CacheDir:     "./cache",
+		ConfigDir:    filepath.Join(home, ".config", "southpark-downloader"),
 		RepoUrl:      "https://github.com/yt-dlp/yt-dlp.git",
 		Branch:       "2023.03.04",
 		MinRate:      "1M",
@@ -87,13 +92,6 @@ func (c *rootContext) PreRunE(cmd *cobra.Command) func(cmd *cobra.Command, args 
 		if !utils.IsApplicationAvailable(c.Ctx, "ffmpeg") {
 			return fmt.Errorf("%w: ffmpeg", utils.ErrApplicationNotFound)
 		}
-
-		db, err := sql.Open("sqlite", filepath.Join(c.Config.CacheDir, "southpark.db"))
-		if err != nil {
-			return err
-		}
-
-		c.DB = db
 
 		err = c.InitDB()
 		if err != nil {

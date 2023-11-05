@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 
 	"github.com/jxsl13/southpark-downloader/utils"
@@ -13,7 +14,7 @@ import (
 type Config struct {
 	YouTubeDLDir string `koanf:"youtube.dl.dir" short:"y" description:"Path to yt-dlp directory"`
 	OutDir       string `koanf:"out.dir" short:"o" description:"Output directory"`
-	CacheDir     string `koanf:"cache.dir" short:"c" description:"Cache directory"`
+	ConfigDir    string `koanf:"config.dir" short:"c" description:"Cache directory"`
 
 	Reinitialize bool `koanf:"reinitialize" short:"i" description:"Re-initialize yt-dlp"`
 	DryRun       bool `koanf:"dry.run" short:"d" description:"Dry run: don't download, just print out URLs"`
@@ -59,7 +60,7 @@ func (c *Config) Validate() error {
 		return err
 	}
 
-	foundCacheDir, err := utils.ExistsDir(c.CacheDir)
+	foundConfigDir, err := utils.ExistsDir(c.ConfigDir)
 	if err != nil {
 		return err
 	}
@@ -85,14 +86,14 @@ func (c *Config) Validate() error {
 	}
 
 	if !foundOutDir {
-		err := os.MkdirAll(c.OutDir, 0775)
+		err := os.MkdirAll(c.OutDir, 0755)
 		if err != nil {
 			return err
 		}
 	}
 
-	if !foundCacheDir {
-		err := os.MkdirAll(c.CacheDir, 0775)
+	if !foundConfigDir {
+		err := os.MkdirAll(c.ConfigDir, 0700)
 		if err != nil {
 			return err
 		}
@@ -103,4 +104,8 @@ func (c *Config) Validate() error {
 	}
 
 	return nil
+}
+
+func (c *Config) DBPath() string {
+	return filepath.Join(c.ConfigDir, "southpark.db")
 }

@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"path/filepath"
 	"time"
 )
 
@@ -66,7 +65,7 @@ SELECT season, episode, title, url, description, imageUrl, date FROM southpark;
 var ErrNotFound = errors.New("no entries found")
 
 func (c *rootContext) InitDB() error {
-	db, err := sql.Open("sqlite", filepath.Join(c.Config.CacheDir, "southpark.db"))
+	db, err := sql.Open("sqlite", c.Config.DBPath())
 	if err != nil {
 		return err
 	}
