@@ -1,0 +1,5 @@
+cache/*
+downloads/*
+yt-dlp/*
+.DS_Store
+southpark-downloader
