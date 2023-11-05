@@ -20,7 +20,7 @@ go install github.com/jxsl13/southpark-downloader@latest
 ## Usage
 
 ```text
-$ ./southpark-downloader --help
+$ southpark-downloader --help
 Environment variables:
   SPDL_YOUTUBE_DL_DIR    Path to yt-dlp directory (default: "./yt-dlp")
   SPDL_OUT_DIR           Output directory (default: "./downloads")
