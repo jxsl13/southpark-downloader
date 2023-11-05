@@ -24,7 +24,7 @@ $ southpark-downloader --help
 Environment variables:
   SPDL_YOUTUBE_DL_DIR    Path to yt-dlp directory (default: "./yt-dlp")
   SPDL_OUT_DIR           Output directory (default: "./downloads")
-  SPDL_CACHE_DIR         Cache directory (default: "./cache")
+  SPDL_CONFIG_DIR        Cache directory (default: "/Users/john/.config/southpark-downloader")
   SPDL_REINITIALIZE      Re-initialize yt-dlp (default: "false")
   SPDL_DRY_RUN           Dry run: don't download, just print out URLs (default: "false")
   SPDL_REPO_URL          URL to yt-dlp repository (default: "https://github.com/yt-dlp/yt-dlp.git")
@@ -46,7 +46,7 @@ Available Commands:
 Flags:
   -a, --all                     Download all episodes
   -b, --branch string           Branch to use for yt-dlp (default "2023.03.04")
-  -c, --cache-dir string        Cache directory (default "./cache")
+  -c, --config-dir string       Cache directory (default "~/.config/southpark-downloader")
   -d, --dry-run                 Dry run: don't download, just print out URLs
   -e, --episode int             Download a specific episode
   -h, --help                    help for southpark-downloader
