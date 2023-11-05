@@ -6,8 +6,8 @@ which does not work that well on macOS.
 
 - creates a sqlite3 database as index
 
-```
-go mod install github.com/jxsl13/southpark-downloader@latest
+```shell
+go install github.com/jxsl13/southpark-downloader@latest
 ```
 
 ## Requirements
