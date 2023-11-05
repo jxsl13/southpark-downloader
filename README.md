@@ -1,7 +1,7 @@
 # South Park Downloader
 
 
-This is a download utility that i shighly inspired by https://github.com/yt-dlp/yt-dlp
+This is a download utility that is highly inspired by https://github.com/xypwn/southpark-de-downloader
 which does not work that well on macOS.
 
 - creates a sqlite3 database as index
