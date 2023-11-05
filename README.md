@@ -19,7 +19,7 @@ go mod install github.com/jxsl13/southpark-downloader@latest
 
 ## Usage
 
-```shell
+```text
 $ ./southpark-downloader --help
 Environment variables:
   SPDL_YOUTUBE_DL_DIR    Path to yt-dlp directory (default: "./yt-dlp")
